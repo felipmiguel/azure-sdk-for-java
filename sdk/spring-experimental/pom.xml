@@ -66,6 +66,7 @@
       <modules>
         <module>credential-free-jdbc</module>
         <module>spring-cloud-azure-starter-jdbc</module>
+        <module>samples</module>
       </modules>
     </profile>
   </profiles>

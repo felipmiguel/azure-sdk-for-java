@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: app-msi-jdbc
+  jpa:
+    hibernate:
+      ddl-auto: update
+  datasource:
+    url: jdbc:mysql://[MYSQL HOSTNAME].mysql.database.azure.com:3306/db?sslMode=REQUIRED&useSSL=true
+    username: [YOUR USERNAME]@[YOUR AAD DOMAIN]@[MYSQL HOSTNAME]
+
