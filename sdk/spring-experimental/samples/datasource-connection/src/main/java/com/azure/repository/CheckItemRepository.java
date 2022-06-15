@@ -11,7 +11,7 @@ import jakarta.persistence.Persistence;
 import com.azure.model.CheckItem;
 
 public class CheckItemRepository {
-	private EntityManagerFactory emf = Persistence.createEntityManagerFactory("Sample");
+	private EntityManagerFactory emf = Persistence.createEntityManagerFactory("CredentialFree");
 	private EntityManager em;
 
 	public CheckItemRepository() {

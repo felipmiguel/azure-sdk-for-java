@@ -11,7 +11,7 @@ import jakarta.persistence.Persistence;
 
 public class CheckListRepository {
 
-    private EntityManagerFactory emf = Persistence.createEntityManagerFactory("Sample");
+    private EntityManagerFactory emf = Persistence.createEntityManagerFactory("CredentialFree");
 	private EntityManager em;
 
     public CheckListRepository() {

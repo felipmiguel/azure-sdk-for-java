@@ -15,40 +15,70 @@ import jakarta.validation.Valid;
 
 public class CheckListServiceImpl implements CheckListService {
 
-    private CheckListRepository checkListRepository;
-    private CheckItemRepository checkItemRepository;
-
-    @Inject
-    public CheckListServiceImpl(CheckListRepository checkListRepository, CheckItemRepository checkItemRepository) {
-        this.checkListRepository = checkListRepository;
-        this.checkItemRepository = checkItemRepository;
-    }
-
     @Override
     public Optional<Checklist> findById(Long id) {
-        return checkListRepository.findById(id);
+        // TODO Auto-generated method stub
+        return null;
     }
 
     @Override
     public void deleteById(Long id) {
-        checkListRepository.deleteById(id);
+        // TODO Auto-generated method stub
         
     }
 
     @Override
     public List<Checklist> findAll() {
-        return checkListRepository.findAll();
+        // TODO Auto-generated method stub
+        return null;
     }
 
     @Override
     public Checklist save(Checklist checklist) {
-        return checkListRepository.save(checklist);
+        // TODO Auto-generated method stub
+        return null;
     }
 
     @Override
     public CheckItem addCheckItem(Long checklistId, @Valid CheckItem checkItem) {
-        Checklist checkList = checkListRepository.findById(checklistId).orElseThrow(()-> new ResourceNotFoundException("Checklist " + checklistId + " not found"));
-        checkItem.setCheckList(checkList);
-        return checkItemRepository.save(checkItem);
+        // TODO Auto-generated method stub
+        return null;
     }
+
+    // private CheckListRepository checkListRepository;
+    // private CheckItemRepository checkItemRepository;
+
+    // @Inject
+    // public CheckListServiceImpl(CheckListRepository checkListRepository, CheckItemRepository checkItemRepository) {
+    //     this.checkListRepository = checkListRepository;
+    //     this.checkItemRepository = checkItemRepository;
+    // }
+
+    // @Override
+    // public Optional<Checklist> findById(Long id) {
+    //     return checkListRepository.findById(id);
+    // }
+
+    // @Override
+    // public void deleteById(Long id) {
+    //     checkListRepository.deleteById(id);
+        
+    // }
+
+    // @Override
+    // public List<Checklist> findAll() {
+    //     return checkListRepository.findAll();
+    // }
+
+    // @Override
+    // public Checklist save(Checklist checklist) {
+    //     return checkListRepository.save(checklist);
+    // }
+
+    // @Override
+    // public CheckItem addCheckItem(Long checklistId, @Valid CheckItem checkItem) {
+    //     Checklist checkList = checkListRepository.findById(checklistId).orElseThrow(()-> new ResourceNotFoundException("Checklist " + checklistId + " not found"));
+    //     checkItem.setCheckList(checkList);
+    //     return checkItemRepository.save(checkItem);
+    // }
 }

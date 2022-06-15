@@ -19,6 +19,15 @@ import jakarta.ws.rs.core.MediaType;
 @Path("checklist")
 public class CheckListResource {
 
+    // @GET
+    // @Produces(MediaType.APPLICATION_JSON)
+    // public Checklist getCheckList(){
+    //     Checklist checklist = new Checklist();
+    //     checklist.setId(1);
+    //     checklist.setName("bob");
+    //     return checklist;
+    // }
+
     private CheckListService checkListService;
 
 	/**
@@ -54,5 +63,4 @@ public class CheckListResource {
     public CheckItem addCheckItem(@PathParam(value = "checklistId") Long checklistId, @Valid CheckItem checkItem) {
         return checkListService.addCheckItem(checklistId, checkItem);
     }
-    
 }
