@@ -1,28 +1,36 @@
 package com.azure.samples.model;
 
+import javax.json.bind.annotation.JsonbTransient;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name="checkitem")
+@NamedQueries({ @NamedQuery(name = "CheckItem.findAll", query = "SELECT c FROM CheckItem c") })
 public class CheckItem {
     
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Column(name="ID")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @JsonIgnore
-    @JoinColumn(name="checklist_id")
-    @ManyToOne    
+    @JoinColumn(name="checklist_ID")
+    @ManyToOne  
+    @JsonbTransient  
     private Checklist checklist;
 
+    @Column(name="description")
     private String description;
 
     public Long getId() {

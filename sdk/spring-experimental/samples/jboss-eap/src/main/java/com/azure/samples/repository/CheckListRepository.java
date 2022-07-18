@@ -32,7 +32,7 @@ public class CheckListRepository {
 
     @Transactional(SUPPORTS)
     public List<Checklist> findAll() {
-        return em.createQuery("from CheckList", Checklist.class).getResultList();
+        return em.createNamedQuery("Checklist.findAll", Checklist.class).getResultList();
     }
 
     public void deleteById(Long id) {

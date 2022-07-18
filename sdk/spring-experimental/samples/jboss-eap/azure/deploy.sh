@@ -53,7 +53,8 @@ APPSERVICE_IDENTITY_OBJID=$(az webapp show --name $APPSERVICE_NAME --resource-gr
 # 2. IMPORTANT: It is required the clientId/appId, and previous command returns object id. So next step retrieve the client id
 APPSERVICE_IDENTITY_APPID=$(az ad sp show --id $APPSERVICE_IDENTITY_OBJID --query appId -o tsv)
 # 3. Create mysql user in the database and grant permissions the database. Note that login is performed using the current logged in user as AAD Admin and using an access token
-mysql -h "${DATABASE_FQDN}" --user "${CURRENT_USER}@${MYSQL_HOST}" --enable-cleartext-plugin --password="$(az account get-access-token --resource-type oss-rdbms --output tsv --query accessToken)" << EOF 
+RDBMS_ACCESS_TOKEN=$(az account get-access-token --resource-type oss-rdbms --output tsv --query accessToken)
+mysql -h "${DATABASE_FQDN}" --user "${CURRENT_USER}@${MYSQL_HOST}" --enable-cleartext-plugin --password="$RDBMS_ACCESS_TOKEN" << EOF 
 SET aad_auth_validate_oids_in_tenant = OFF;
 
 DROP USER IF EXISTS '${APPSERVICE_LOGIN_NAME}'@'%';
@@ -65,13 +66,16 @@ GRANT ALL PRIVILEGES ON ${DATABASE_NAME}.* TO '${APPSERVICE_LOGIN_NAME}'@'%';
 FLUSH privileges;
 EOF
 
-# 4. Remove temporary firewall rule
+# 4. Create Database tables
+mysql -h "${DATABASE_FQDN}" --user "${CURRENT_USER}@${MYSQL_HOST}" --enable-cleartext-plugin --password="$RDBMS_ACCESS_TOKEN" < init-db.sql
+
+# 5. Remove temporary firewall rule
 az mysql server firewall-rule delete --resource-group $RESOURCE_GROUP --server $MYSQL_HOST --name AllowCurrentMachineToConnect
 
-# 4. Build WAR file
+# 6. Build WAR file
 mvn clean package -DskipTests -f ../pom.xml
-# 5. Set environment variables for the web application pointing to the database and using the appservice identity login
+# 7. Set environment variables for the web application pointing to the database and using the appservice identity login
 az webapp config appsettings set -g $RESOURCE_GROUP -n $APPSERVICE_NAME --settings MYSQL_CONNECTION_URL=${MYSQL_CONNECTION_URL} MYSQL_USER=${APPSERVICE_LOGIN_NAME}'@'${MYSQL_HOST}
-# 6. Create webapp deployment
+# 8. Create webapp deployment
 az webapp deploy --resource-group $RESOURCE_GROUP --name $APPSERVICE_NAME --src-path ../target/ROOT.war --type war
 az webapp deploy --resource-group $RESOURCE_GROUP --name $APPSERVICE_NAME --src-path ../src/main/webapp/WEB-INF/createMySQLDataSource.sh --type startup

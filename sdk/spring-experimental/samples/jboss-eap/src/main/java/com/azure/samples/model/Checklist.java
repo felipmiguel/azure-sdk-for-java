@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,6 +15,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -24,9 +27,11 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
 @Table(name = "checklist")
+@NamedQueries({ @NamedQuery(name = "Checklist.findAll", query = "SELECT c FROM Checklist c") })
 public class Checklist {
 
     @Id
+    @Column(name = "ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -43,6 +48,7 @@ public class Checklist {
     @Column(name = "description")
     private String description;
 
+    @JsonbTransient
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "checklist")
     private Set<CheckItem> items;
 
@@ -89,7 +95,7 @@ public class Checklist {
         return Collections.unmodifiableList(new ArrayList<>(getCheckItemsInternal()));
     }
 
-    public void addItem(CheckItem item){
+    public void addItem(CheckItem item) {
         getCheckItemsInternal().add(item);
         item.setCheckList(this);
     }

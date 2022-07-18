@@ -22,9 +22,7 @@ public class CheckItemRepository {
 	private EntityManager em;
 
 	public CheckItem save(CheckItem item) {
-		em.getTransaction().begin();
 		em.persist(item);
-		em.getTransaction().commit();
 		return item;
 	}
 	
@@ -37,19 +35,15 @@ public class CheckItemRepository {
 
 	@Transactional(SUPPORTS)
 	public List<CheckItem> findAll() {
-		return em.createQuery("from CheckItem", CheckItem.class).getResultList();
+		return em.createQuery("CheckItem.findAll", CheckItem.class).getResultList();
 	}
 
 	public CheckItem update(CheckItem item) {
-		em.getTransaction().begin();
 		item = em.merge(item);
-		em.getTransaction().commit();
 		return item;
 	}
 
 	public void deleteById(Long id) {
-		em.getTransaction().begin();
 		em.remove(em.find(CheckItem.class, id));
-		em.getTransaction().commit();
 	}
 }
