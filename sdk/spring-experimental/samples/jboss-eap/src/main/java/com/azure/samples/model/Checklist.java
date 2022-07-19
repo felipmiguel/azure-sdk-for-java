@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.json.bind.annotation.JsonbDateFormat;
 import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -21,9 +22,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-// import javax.validation.constraints.NotEmpty;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
 @Table(name = "checklist")
@@ -42,7 +40,7 @@ public class Checklist {
     @Column(name = "date")
     @Temporal(TemporalType.DATE)
     // @NotEmpty
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    @JsonbDateFormat("yyyy-MM-dd'T'HH:mm:ss")
     private Date date;
 
     @Column(name = "description")

@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import com.azure.samples.model.Checklist;
 
+import javax.enterprise.context.RequestScoped;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
@@ -13,6 +14,7 @@ import static javax.transaction.Transactional.TxType.REQUIRED;
 import static javax.transaction.Transactional.TxType.SUPPORTS;
 
 @Transactional(REQUIRED)
+@RequestScoped
 public class CheckListRepository {
 
     @PersistenceContext(unitName = "CredentialFreeDataSourcePU")

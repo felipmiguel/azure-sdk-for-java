@@ -20,13 +20,6 @@ public class CheckListServiceImpl implements CheckListService {
     @Inject
     CheckItemRepository checkItemRepository;
 
-    // @Inject
-    // public CheckListServiceImpl(CheckListRepository checkListRepository,
-    // CheckItemRepository checkItemRepository) {
-    // this.checkListRepository = checkListRepository;
-    // this.checkItemRepository = checkItemRepository;
-    // }
-
     @Override
     public Optional<Checklist> findById(Long id) {
         return checkListRepository.findById(id);

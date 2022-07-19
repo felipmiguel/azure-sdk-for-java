@@ -19,15 +19,6 @@ import javax.ws.rs.core.MediaType;
 @Path("/checklist")
 public class CheckListResource {
 
-    // @GET
-    // @Produces(MediaType.APPLICATION_JSON)
-    // public Checklist getCheckList(){
-    //     Checklist checklist = new Checklist();
-    //     checklist.setId(1);
-    //     checklist.setName("bob");
-    //     return checklist;
-    // }
-
     @Inject
     private CheckListService checkListService;
 

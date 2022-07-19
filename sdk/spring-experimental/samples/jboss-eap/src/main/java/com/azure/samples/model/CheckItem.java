@@ -12,8 +12,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 @Entity
 @Table(name="checkitem")
 @NamedQueries({ @NamedQuery(name = "CheckItem.findAll", query = "SELECT c FROM CheckItem c") })
@@ -24,7 +22,6 @@ public class CheckItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @JsonIgnore
     @JoinColumn(name="checklist_ID")
     @ManyToOne  
     @JsonbTransient  
@@ -41,7 +38,6 @@ public class CheckItem {
         this.id = id;
     }
 
-    @JsonIgnore
     public Checklist getCheckList() {
         return checklist;
     }
