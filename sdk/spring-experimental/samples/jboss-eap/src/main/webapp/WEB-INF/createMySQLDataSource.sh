@@ -15,8 +15,7 @@ data-source add --name=CredentialFreeDataSourceDS \
 --driver-class=com.mysql.cj.jdbc.Driver \
 --jta=true \
 --use-java-context=true \
---validate-on-match=false \
---background-validation=false \
+--valid-connection-checker-class-name=org.jboss.jca.adapters.jdbc.extensions.mysql.MySQLValidConnectionChecker \
 --exception-sorter-class-name=com.mysql.cj.jdbc.integration.jboss.ExtendedMysqlExceptionSorter
 exit
 EOF
