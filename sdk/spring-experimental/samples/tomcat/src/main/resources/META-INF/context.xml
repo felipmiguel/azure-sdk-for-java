@@ -1,0 +1,9 @@
+<Context>
+    <Resource
+        name="jdbc/dbconnection"
+        type="javax.sql.DataSource"
+        url="${connURL}"
+        driverClassName="org.postgresql.Driver"
+        username="${dbuser}"
+    />
+</Context>
