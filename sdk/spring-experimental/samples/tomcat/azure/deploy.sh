@@ -78,4 +78,4 @@ mvn clean package -DskipTests -f ../pom.xml
 # 7. Set environment variables for the web application pointing to the database and using the appservice identity login
 az webapp config appsettings set -g $RESOURCE_GROUP -n $APPSERVICE_NAME --settings "CATALINA_OPTS=\$CATALINA_OPTS -Ddbuser=${APPSERVICE_LOGIN_NAME}'@'${POSTGRESQL_HOST} -DconnURL=${POSTGRESQL_CONNECTION_URL}"
 # 8. Create webapp deployment
-az webapp deploy --resource-group $RESOURCE_GROUP --name $APPSERVICE_NAME --src-path ../target/ROOT.war --type war
+az webapp deploy --resource-group $RESOURCE_GROUP --name $APPSERVICE_NAME --src-path ../target/app.war --type war
