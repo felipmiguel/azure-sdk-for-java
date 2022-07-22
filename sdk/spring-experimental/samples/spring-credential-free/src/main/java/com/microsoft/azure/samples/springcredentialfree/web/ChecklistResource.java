@@ -1,5 +1,7 @@
 package com.microsoft.azure.samples.springcredentialfree.web;
 
+import java.time.Duration;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
@@ -24,17 +26,19 @@ public class ChecklistResource {
 
     public ChecklistResource(CheckListService checklistService) {
         this.checkListService = checklistService;
-    
+
     }
+
     @GetMapping
-	public List<Checklist> getCheckLists() {		
-		return checkListService.findAll();
-	}
+    public List<Checklist> getCheckLists() {
+        return checkListService.findAll();
+    }
 
     @GetMapping("{checklistId}")
-	public Checklist getCheckList(@PathVariable(value = "checklistId") Long checklistId) {
-		return checkListService.findById(checklistId).orElseThrow(() -> new ResourceNotFoundException("checklist  " + checklistId + " not found"));
-	}
+    public Checklist getCheckList(@PathVariable(value = "checklistId") Long checklistId) {
+        return checkListService.findById(checklistId)
+                .orElseThrow(() -> new ResourceNotFoundException("checklist  " + checklistId + " not found"));
+    }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -44,8 +48,9 @@ public class ChecklistResource {
 
     @PostMapping("{checklistId}/item")
     @ResponseStatus(HttpStatus.CREATED)
-    public CheckItem addCheckItem(@PathVariable(value = "checklistId") Long checklistId, @RequestBody CheckItem checkItem) {
+    public CheckItem addCheckItem(@PathVariable(value = "checklistId") Long checklistId,
+            @RequestBody CheckItem checkItem) {
         return checkListService.addCheckItem(checklistId, checkItem);
     }
-    
+
 }
