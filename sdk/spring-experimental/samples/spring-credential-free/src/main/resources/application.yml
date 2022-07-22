@@ -1,0 +1,6 @@
+spring:
+    datasource:
+        url: jdbc:postgresql://psql-tomcat-credential-free.postgres.database.azure.com:5432/checklist
+        username: fmiguel@microsoft.com@psql-tomcat-credential-free
+    jpa:
+        database-platform: org.hibernate.dialect.PostgreSQLDialect
