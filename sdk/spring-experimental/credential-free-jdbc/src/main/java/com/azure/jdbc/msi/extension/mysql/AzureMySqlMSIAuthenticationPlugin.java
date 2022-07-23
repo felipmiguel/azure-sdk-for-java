@@ -8,6 +8,7 @@ import com.azure.core.credential.AccessToken;
 import com.azure.core.credential.TokenCredential;
 import com.azure.core.credential.TokenRequestContext;
 import com.azure.identity.DefaultAzureCredentialBuilder;
+import com.azure.jdbc.msi.extension.MSIAuthenticationPlugin;
 import com.mysql.cj.callback.MysqlCallbackHandler;
 import com.mysql.cj.callback.UsernameCallback;
 import com.mysql.cj.protocol.AuthenticationPlugin;
@@ -21,17 +22,14 @@ import org.slf4j.LoggerFactory;
 /**
  * The Authentication plugin that enables Azure AD managed identity support.
  */
-public class AzureMySqlMSIAuthenticationPlugin implements AuthenticationPlugin<NativePacketPayload> {
+public class AzureMySqlMSIAuthenticationPlugin extends MSIAuthenticationPlugin implements AuthenticationPlugin<NativePacketPayload> {
     public static String PLUGIN_NAME = "mysql_clear_password";
     // public static String PLUGIN_NAME = "aad_auth";
     // public static String PLUGIN_NAME = "azure_mysql_msi";
 
     Logger logger = LoggerFactory.getLogger(AzureMySqlMSIAuthenticationPlugin.class);
 
-    /**
-     * Stores the access token.
-     */
-    private AccessToken accessToken;
+    
 
     /**
      * Stores the callback handler.
@@ -116,7 +114,8 @@ public class AzureMySqlMSIAuthenticationPlugin implements AuthenticationPlugin<N
 
     @Override
     public void reset() {
-        accessToken = null;
+        // TODO: Reset in base class implementation
+        // accessToken = null;
     }
 
     @Override
@@ -127,7 +126,8 @@ public class AzureMySqlMSIAuthenticationPlugin implements AuthenticationPlugin<N
         this.sourceOfAuthData = sourceOfAuthData;
     }
 
-    private String getClientId() {
+    @Override
+    protected String getClientId() {
         String clientId;
         if (this.protocol.getPropertySet().getProperty("clientid") != null) {
             logger.info("clientid=" + this.protocol.getPropertySet().getProperty("clientid"));
@@ -138,29 +138,7 @@ public class AzureMySqlMSIAuthenticationPlugin implements AuthenticationPlugin<N
         return clientId;
     }
 
-    private TokenCredential credential;
+    
 
-    private TokenCredential getTokenCredential() {
-        if (credential == null) {
-            String clientId = getClientId();
-            if (clientId != null && !clientId.isEmpty()) {
-                credential = new DefaultAzureCredentialBuilder().managedIdentityClientId(clientId).build();
-            } else {
-                credential = new DefaultAzureCredentialBuilder().build();
-            }
-        }
-        return credential;
-    }
-
-    private AccessToken getAccessToken() {
-        if (accessToken == null || accessToken.isExpired()) {
-            TokenCredential credential = getTokenCredential();
-            TokenRequestContext request = new TokenRequestContext();
-            ArrayList<String> scopes = new ArrayList<>();
-            scopes.add("https://ossrdbms-aad.database.windows.net");
-            request.setScopes(scopes);
-            accessToken = credential.getToken(request).block(Duration.ofSeconds(30));
-        }
-        return accessToken;
-    }
+    
 }

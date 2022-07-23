@@ -8,6 +8,8 @@ import com.azure.identity.ChainedTokenCredentialBuilder;
 import com.azure.identity.DefaultAzureCredential;
 import com.azure.identity.DefaultAzureCredentialBuilder;
 import com.azure.identity.ManagedIdentityCredentialBuilder;
+import com.azure.jdbc.msi.extension.MSIAuthenticationPlugin;
+
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Properties;
@@ -22,15 +24,10 @@ import static org.postgresql.util.PSQLState.INVALID_PASSWORD;
 /**
  * The Authentication plugin that enables Azure AD managed identity support.
  */
-public class AzurePostgresqlMSIAuthenticationPlugin implements AuthenticationPlugin {
+public class AzurePostgresqlMSIAuthenticationPlugin extends MSIAuthenticationPlugin implements AuthenticationPlugin {
 
-    DefaultAzureCredential azureCredential;
     Logger logger = LoggerFactory.getLogger(AzurePostgresqlMSIAuthenticationPlugin.class);
-    /**
-     * Stores the access token.
-     */
-    private AccessToken accessToken;
-
+    
     /**
      * Stores the properties.
      */
@@ -62,7 +59,7 @@ public class AzurePostgresqlMSIAuthenticationPlugin implements AuthenticationPlu
     public char[] getPassword(AuthenticationRequestType art) throws PSQLException {
         char[] password;
 
-        accessToken = getAccessToken();
+        AccessToken accessToken = getAccessToken();
 
         if (accessToken != null) {
             password = accessToken.getToken().toCharArray();
@@ -73,37 +70,12 @@ public class AzurePostgresqlMSIAuthenticationPlugin implements AuthenticationPlu
         return password;
     }
 
-    private String getClientId() {
+    @Override
+    protected String getClientId() {
         String clientId = null;
         if (properties != null && properties.containsKey("clientid")) {
             clientId = properties.getProperty("clientid");
         }
         return clientId;
-    }
-
-    private TokenCredential credential;
-
-    private TokenCredential getTokenCredential() {
-        if (credential == null) {
-            String clientId = getClientId();
-            if (clientId != null && !clientId.isEmpty()) {
-                credential = new DefaultAzureCredentialBuilder().managedIdentityClientId(clientId).build();
-            } else {
-                credential = new DefaultAzureCredentialBuilder().build();
-            }
-        }
-        return credential;
-    }
-
-    private AccessToken getAccessToken() {
-        if (accessToken == null || accessToken.isExpired()) {
-            TokenCredential credential = getTokenCredential();
-            TokenRequestContext request = new TokenRequestContext();
-            ArrayList<String> scopes = new ArrayList<>();
-            scopes.add("https://ossrdbms-aad.database.windows.net");
-            request.setScopes(scopes);
-            accessToken = credential.getToken(request).block(Duration.ofSeconds(30));
-        }
-        return accessToken;
     }
 }
