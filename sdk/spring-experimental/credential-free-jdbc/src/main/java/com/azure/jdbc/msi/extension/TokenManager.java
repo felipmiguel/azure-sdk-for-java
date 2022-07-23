@@ -1,21 +1,17 @@
 package com.azure.jdbc.msi.extension;
 
-import com.azure.core.credential.AccessToken;
-
-import java.time.Duration;
-import java.util.ArrayList;
-import java.util.Dictionary;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.concurrent.locks.ReentrantLock;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.azure.core.credential.AccessToken;
-import com.azure.core.credential.TokenCredential;
-import com.azure.core.credential.TokenRequestContext;
-import com.azure.identity.DefaultAzureCredentialBuilder;
 
 public class TokenManager {
+
+    Logger logger = LoggerFactory.getLogger(TokenManager.class);
 
     private TokenManager() {
 
@@ -47,6 +43,7 @@ public class TokenManager {
                 if (accessTokenCache.containsKey(key)) {
                     return accessTokenCache.get(key).getAccessToken(clientId);
                 } else {
+                    logger.debug("creating token manager for %s",key);
                     SyncTokenManager tokenManager = new SyncTokenManager();
                     accessTokenCache.put(key, tokenManager);
                     // exit from lock as soon as possible. get the access token after unlocking the lock

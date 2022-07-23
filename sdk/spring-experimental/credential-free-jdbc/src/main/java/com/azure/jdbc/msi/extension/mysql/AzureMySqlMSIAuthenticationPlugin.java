@@ -1,23 +1,16 @@
 package com.azure.jdbc.msi.extension.mysql;
 
-import java.time.Duration;
-import java.util.ArrayList;
 import java.util.List;
 
-import com.azure.core.credential.AccessToken;
-import com.azure.core.credential.TokenCredential;
-import com.azure.core.credential.TokenRequestContext;
-import com.azure.identity.DefaultAzureCredentialBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.azure.jdbc.msi.extension.MSIAuthenticationPlugin;
 import com.mysql.cj.callback.MysqlCallbackHandler;
-import com.mysql.cj.callback.UsernameCallback;
 import com.mysql.cj.protocol.AuthenticationPlugin;
 import com.mysql.cj.protocol.Protocol;
 import com.mysql.cj.protocol.a.NativeConstants;
 import com.mysql.cj.protocol.a.NativePacketPayload;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * The Authentication plugin that enables Azure AD managed identity support.

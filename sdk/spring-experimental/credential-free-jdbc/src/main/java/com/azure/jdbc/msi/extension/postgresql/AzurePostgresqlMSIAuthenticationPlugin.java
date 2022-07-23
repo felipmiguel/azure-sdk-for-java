@@ -1,25 +1,17 @@
 package com.azure.jdbc.msi.extension.postgresql;
 
-import com.azure.core.credential.AccessToken;
-import com.azure.core.credential.TokenCredential;
-import com.azure.core.credential.TokenRequestContext;
-import com.azure.identity.AzureCliCredentialBuilder;
-import com.azure.identity.ChainedTokenCredentialBuilder;
-import com.azure.identity.DefaultAzureCredential;
-import com.azure.identity.DefaultAzureCredentialBuilder;
-import com.azure.identity.ManagedIdentityCredentialBuilder;
-import com.azure.jdbc.msi.extension.MSIAuthenticationPlugin;
+import static org.postgresql.util.PSQLState.INVALID_PASSWORD;
 
-import java.time.Duration;
-import java.util.ArrayList;
 import java.util.Properties;
+
 import org.postgresql.plugin.AuthenticationPlugin;
 import org.postgresql.plugin.AuthenticationRequestType;
 import org.postgresql.util.PSQLException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static org.postgresql.util.PSQLState.INVALID_PASSWORD;
+import com.azure.core.credential.AccessToken;
+import com.azure.jdbc.msi.extension.MSIAuthenticationPlugin;
 
 /**
  * The Authentication plugin that enables Azure AD managed identity support.
