@@ -1,12 +1,12 @@
-RESOURCE_GROUP=rg-tomcat-credential-free
-POSTGRESQL_HOST=psql-tomcat-credential-free
+RESOURCE_GROUP=rg-spring-javase-credential-free
+POSTGRESQL_HOST=psql-spring-javase-credential-free
 DATABASE_NAME=checklist
 DATABASE_FQDN=${POSTGRESQL_HOST}.postgres.database.azure.com
 # Note that the connection url does not includes the password-free authentication plugin
 # The configuration is injected by spring-cloud-azure-starter-jdbc
 POSTGRESQL_CONNECTION_URL="jdbc:postgresql://${DATABASE_FQDN}:5432/${DATABASE_NAME}"
-APPSERVICE_NAME=tomcat-credential-free
-APPSERVICE_PLAN=asp-tomcat-credential-free
+APPSERVICE_NAME=spring-javase-credential-free
+APPSERVICE_PLAN=asp-spring-javase-credential-free
 LOCATION=eastus
 POSTGRESQL_ADMIN_USER=azureuser
 # Generating a random password for the PostgreSQL admin user as it is mandatory
