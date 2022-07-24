@@ -2,8 +2,8 @@ RESOURCE_GROUP=rg-tomcat-credential-free
 POSTGRESQL_HOST=psql-tomcat-credential-free
 DATABASE_NAME=checklist
 DATABASE_FQDN=${POSTGRESQL_HOST}.postgres.database.azure.com
-# Note that the connection url includes the password-free authentication plugin
-# POSTGRESQL_CONNECTION_URL="jdbc:postgresql://${DATABASE_FQDN}:5432/${DATABASE_NAME}?sslmode=require&authenticationPluginClassName=com.azure.jdbc.msi.extension.postgresql.AzurePostgresqlMSIAuthenticationPlugin"
+# Note that the connection url does not includes the password-free authentication plugin
+# The configuration is injected by spring-cloud-azure-starter-jdbc
 POSTGRESQL_CONNECTION_URL="jdbc:postgresql://${DATABASE_FQDN}:5432/${DATABASE_NAME}"
 APPSERVICE_NAME=tomcat-credential-free
 APPSERVICE_PLAN=asp-tomcat-credential-free
@@ -38,12 +38,10 @@ az postgres server ad-admin create --server-name $POSTGRESQL_HOST --resource-gro
 # create postgres database
 az postgres db create -g $RESOURCE_GROUP -s $POSTGRESQL_HOST -n $DATABASE_NAME
 
-
-
-# Create app service plan (premium required for JBoss EAP)
+# Create app service plan
 az appservice plan create --name $APPSERVICE_PLAN --resource-group $RESOURCE_GROUP --location $LOCATION --sku B1 --is-linux
 # Create application service
-az webapp create --name $APPSERVICE_NAME --resource-group $RESOURCE_GROUP --plan $APPSERVICE_PLAN --runtime "TOMCAT:9.0-jre8" --assign-identity [system]
+az webapp create --name $APPSERVICE_NAME --resource-group $RESOURCE_GROUP --plan $APPSERVICE_PLAN --runtime "JAVA:8-jre8" --assign-identity [system]
 
 # create service connection. Not yet supported for webapp and managed identity
 # It would be something like: az webapp connection create postgres...
@@ -71,16 +69,16 @@ GRANT ALL PRIVILEGES ON DATABASE "${DATABASE_NAME}" TO "${APPSERVICE_LOGIN_NAME}
 
 EOF
 
-# 4. Create Database tables
-# psql "host=$DATABASE_FQDN port=5432 user=${CURRENT_USER}@${POSTGRESQL_HOST} dbname=${DATABASE_NAME} sslmode=require" < init-db.sql
-
-# 5. Remove temporary firewall rule
+# 4. Remove temporary firewall rule
 az postgres server firewall-rule delete --resource-group $RESOURCE_GROUP --server $POSTGRESQL_HOST --name AllowCurrentMachineToConnect
 
-# 6. Build WAR file
-mvn clean package -DskipTests -f ../pom.xml
-# 7. Set environment variables for the web application pointing to the database and using the appservice identity login
+# Service connection to postgresql end of configuration
 
+# Build JAR file
+mvn clean package -DskipTests -f ../pom.xml
+
+# 6. Set environment variables for the web application pointing to the database and using the appservice identity login
 az webapp config appsettings set -g $RESOURCE_GROUP -n $APPSERVICE_NAME --settings "SPRING_DATASOURCE_USERNAME=${APPSERVICE_LOGIN_NAME}@${POSTGRESQL_HOST}" "SPRING_DATASOURCE_URL=${POSTGRESQL_CONNECTION_URL}"
-# 8. Create webapp deployment
-az webapp deploy --resource-group $RESOURCE_GROUP --name $APPSERVICE_NAME --src-path ../target/app.war --type war
+
+# 7. Create webapp deployment
+az webapp deploy --resource-group $RESOURCE_GROUP --name $APPSERVICE_NAME --src-path ../target/app.jar --type jar
