@@ -54,7 +54,7 @@ az spring app create --name ${APPSERVICE_NAME} \
 az spring connection create postgres \
     --resource-group $RESOURCE_GROUP \
     --service $SPRING_APPS_SERVICE \
-    --connection demo-connection \
+    --connection demo_connection \
     --app ${APPSERVICE_NAME} \
     --deployment default \
     --tg $RESOURCE_GROUP \
@@ -70,4 +70,4 @@ mvn clean package -DskipTests -f ../pom.xml
 az spring app deploy --name $APPSERVICE_NAME\
     --resource-group $RESOURCE_GROUP \
     --service $SPRING_APPS_SERVICE \
-    --jar-path ../target/app.jar
+    --artifact-path ../target/app.jar
