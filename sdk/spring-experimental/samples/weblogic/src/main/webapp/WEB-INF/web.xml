@@ -4,4 +4,31 @@
         <param-name>resteasy.preferJacksonOverJsonB</param-name>
         <param-value>false</param-value>
     </context-param>
+    <!-- <data-source>
+        <name>java:app/CredentialFreeDataSource</name>
+        <class-name>com.mysql.cj.jdbc.Driver</class-name>
+        <database-name>checklist</database-name>
+        <url>jdbc:mysql://mysql-checklist-credential-free.mysql.database.azure.com:3306</url>
+        <user>checklistapp@microsoft.com@mysql-checklist-credential-free</user>
+        <property>
+            <name>useSSL</name>
+            <value>true</value>
+        </property>
+        <property>
+            <name>requireSSL</name>
+            <value>true</value>
+        </property>
+        <property>
+            <name>defaultAuthenticationPlugin</name>
+            <value>com.azure.jdbc.msi.extension.mysql.AzureMySqlMSIAuthenticationPlugin</value>
+        </property>
+        <property>
+            <name>authenticationPlugins</name>
+            <value>com.azure.jdbc.msi.extension.mysql.AzureMySqlMSIAuthenticationPlugin</value>
+        </property>
+        <property>
+            <name>clientid</name>
+            <value>6f75da39-8c15-45a2-ba60-5bc2907c4048</value>
+        </property>
+    </data-source> -->
 </web-app>

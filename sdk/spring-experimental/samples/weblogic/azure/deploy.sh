@@ -1,5 +1,5 @@
 POM_FILE='../pom.xml'
-RESOURCE_GROUP=rg-wls-credential-free
+RESOURCE_GROUP=rg-wls-msi
 MYSQL_HOST=mysql-checklist-credential-free
 DATABASE_NAME=checklist
 DATABASE_FQDN=${MYSQL_HOST}.mysql.database.azure.com
@@ -49,20 +49,20 @@ az mysql db create -g $RESOURCE_GROUP -s $MYSQL_HOST -n $DATABASE_NAME
 # Create user assignmed managed identity
 az identity create -g $RESOURCE_GROUP -n $APPLICATION_MSI_NAME
 
-# Accept the terms to create WebLogic server. Please read carefully terms and conditions before accepting. 
-az vm image terms show --urn ${WLS_URN}
-az vm image terms accept --urn ${WLS_URN}
-# Create WebLogic Server with Admin Server deployment. https://docs.microsoft.com/en-us/azure/virtual-machines/workloads/oracle/oracle-weblogic#oracle-weblogic-server-with-admin-server
-az vm create -n ${VM_NAME} -g ${RESOURCE_GROUP} \
-    --image "${WLS_URN}" \
-    --admin-user ${VM_ADMIN_USER} --admin-password ${VM_ADMIN_PASSWORD} --authentication-type Password \
-    --accept-term \
-    --location ${LOCATION} \
-    --public-ip-address-allocation dynamic \
-    --size Standard_B2ms \
-    --os-disk-delete-option Delete \
-    --assign-identity ${APPLICATION_MSI_NAME} \
-    --user-data "wlsUserName=${WLS_ADMIN_USER}&wlsPassword=${WLS_ADMIN_PASSWORD}"
+# # Accept the terms to create WebLogic server. Please read carefully terms and conditions before accepting. 
+# az vm image terms show --urn ${WLS_URN}
+# az vm image terms accept --urn ${WLS_URN}
+# # Create WebLogic Server with Admin Server deployment. https://docs.microsoft.com/en-us/azure/virtual-machines/workloads/oracle/oracle-weblogic#oracle-weblogic-server-with-admin-server
+# az vm create -n ${VM_NAME} -g ${RESOURCE_GROUP} \
+#     --image "${WLS_URN}" \
+#     --admin-user ${VM_ADMIN_USER} --admin-password ${VM_ADMIN_PASSWORD} --authentication-type Password \
+#     --accept-term \
+#     --location ${LOCATION} \
+#     --public-ip-address-allocation dynamic \
+#     --size Standard_B2ms \
+#     --os-disk-delete-option Delete \
+#     --assign-identity ${APPLICATION_MSI_NAME} \
+#     --user-data "wlsUserName=${WLS_ADMIN_USER}&wlsPassword=${WLS_ADMIN_PASSWORD}"
 
 
 
@@ -76,10 +76,8 @@ az vm create -n ${VM_NAME} -g ${RESOURCE_GROUP} \
 # 0. Create a temporary firewall rule to allow connections from current machine to the mysql server
 MY_IP=$(curl http://whatismyip.akamai.com)
 az mysql server firewall-rule create --resource-group $RESOURCE_GROUP --server $MYSQL_HOST --name AllowCurrentMachineToConnect --start-ip-address ${MY_IP} --end-ip-address ${MY_IP}
-# 1. Get web application managed identity
-APPSERVICE_IDENTITY_OBJID=$(az webapp show --name $APPSERVICE_NAME --resource-group $RESOURCE_GROUP --query identity.principalId -o tsv)
-# 2. IMPORTANT: It is required the clientId/appId, and previous command returns object id. So next step retrieve the client id
-APPSERVICE_IDENTITY_APPID=$(az ad sp show --id $APPSERVICE_IDENTITY_OBJID --query appId -o tsv)
+# 1. Get user defined managed clientId
+APPSERVICE_IDENTITY_APPID=$(az identity show -g ${RESOURCE_GROUP} -n ${APPLICATION_MSI_NAME} --query clientId -o tsv)
 # 3. Create mysql user in the database and grant permissions the database. Note that login is performed using the current logged in user as AAD Admin and using an access token
 RDBMS_ACCESS_TOKEN=$(az account get-access-token --resource-type oss-rdbms --output tsv --query accessToken)
 mysql -h "${DATABASE_FQDN}" --user "${CURRENT_USER}@${MYSQL_HOST}" --enable-cleartext-plugin --password="$RDBMS_ACCESS_TOKEN" << EOF 
