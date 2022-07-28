@@ -11,8 +11,10 @@ import com.azure.samples.repository.CheckListRepository;
 import com.azure.samples.service.CheckListService;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.validation.Valid;
 
+@Named
 public class CheckListServiceImpl implements CheckListService {
 
     @Inject

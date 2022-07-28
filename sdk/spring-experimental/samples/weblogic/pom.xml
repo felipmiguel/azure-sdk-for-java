@@ -47,6 +47,14 @@
       <artifactId>credential-free-jdbc</artifactId>
       <version>0.0.1-SNAPSHOT</version>
     </dependency>
+  
+    <dependency>
+      <groupId>com.azure</groupId>
+      <artifactId>azure-identity</artifactId>
+      <version>1.5.3</version>
+      <!-- it is deployed in WLS -->
+      <scope>provided</scope>
+    </dependency>
   </dependencies>
   <build>
     <finalName>ROOT</finalName>
