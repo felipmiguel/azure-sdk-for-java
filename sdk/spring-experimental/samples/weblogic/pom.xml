@@ -37,24 +37,7 @@
       <version>${mockito-core.version}</version>
       <scope>test</scope>
     </dependency>
-    <dependency>
-      <groupId>mysql</groupId>
-      <artifactId>mysql-connector-java</artifactId>
-      <version>${mysql-jdbc-driver}</version>
-    </dependency>
-    <dependency>
-      <groupId>com.azure</groupId>
-      <artifactId>credential-free-jdbc</artifactId>
-      <version>0.0.1-SNAPSHOT</version>
-    </dependency>
-  
-    <dependency>
-      <groupId>com.azure</groupId>
-      <artifactId>azure-identity</artifactId>
-      <version>1.5.3</version>
-      <!-- it is deployed in WLS -->
-      <scope>provided</scope>
-    </dependency>
+    
   </dependencies>
   <build>
     <finalName>ROOT</finalName>
