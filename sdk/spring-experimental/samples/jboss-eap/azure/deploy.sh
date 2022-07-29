@@ -1,12 +1,12 @@
 POM_FILE='../pom.xml'
-RESOURCE_GROUP=rg-checklist-credential-free
-MYSQL_HOST=mysql-checklist-credential-free
+RESOURCE_GROUP=rg-jboss-credential-free
+MYSQL_HOST=mysql-jboss-credential-free
 DATABASE_NAME=checklist
 DATABASE_FQDN=${MYSQL_HOST}.mysql.database.azure.com
 # Note that the connection url includes the password-free authentication plugin
 MYSQL_CONNECTION_URL="jdbc:mysql://${DATABASE_FQDN}:3306/${DATABASE_NAME}?useSSL=true&requireSSL=true&defaultAuthenticationPlugin=com.azure.jdbc.msi.extension.mysql.AzureMySqlMSIAuthenticationPlugin&authenticationPlugins=com.azure.jdbc.msi.extension.mysql.AzureMySqlMSIAuthenticationPlugin"
-APPSERVICE_NAME=checklist-credential-free
-APPSERVICE_PLAN=asp-checklist-credential-free
+APPSERVICE_NAME=jboss-credential-free
+APPSERVICE_PLAN=asp-jboss-credential-free
 LOCATION=eastus
 MYSQL_ADMIN_USER=azureuser
 # Generating a random password for the MySQL user as it is mandatory
