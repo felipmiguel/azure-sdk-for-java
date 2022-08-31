@@ -10,4 +10,8 @@ public abstract class MSIAuthenticationPlugin {
     protected AccessToken getAccessToken(){
         return TokenManager.getInstance().getAccessToken(getClientId());
     }
+
+    protected void resetAccessToken(){
+        TokenManager.getInstance().resetAccessToken(getClientId());
+    }
 }

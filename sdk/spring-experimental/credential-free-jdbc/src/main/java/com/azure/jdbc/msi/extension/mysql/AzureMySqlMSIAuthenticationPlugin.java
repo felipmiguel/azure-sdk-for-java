@@ -50,6 +50,7 @@ public class AzureMySqlMSIAuthenticationPlugin extends MSIAuthenticationPlugin i
     @Override
     public void init(Protocol<NativePacketPayload> protocol) {
         this.protocol = protocol;
+        logger.info("AzureMySqlMSIAuthenticationPlugin.init()");
     }
 
     @Override
@@ -107,8 +108,7 @@ public class AzureMySqlMSIAuthenticationPlugin extends MSIAuthenticationPlugin i
 
     @Override
     public void reset() {
-        // TODO: Reset in base class implementation
-        // accessToken = null;
+        resetAccessToken();        
     }
 
     @Override

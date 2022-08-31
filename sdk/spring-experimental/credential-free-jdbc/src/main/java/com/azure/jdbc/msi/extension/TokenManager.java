@@ -33,25 +33,33 @@ public class TokenManager {
     ReentrantLock lock = new ReentrantLock();
 
     protected AccessToken getAccessToken(String clientId) {
+        logger.warn("Getting access token for clientId: %s", clientId);
         String key = getKey(clientId);
         if (accessTokenCache.containsKey(key)) {
             return accessTokenCache.get(key).getAccessToken(clientId);
         } else {
+            SyncTokenManager tokenManager;
             try {
                 lock.lock();
-                // check again after acquiring the lock as the previous thread may have already added the token
+                // check again after acquiring the lock as the previous thread may have already
+                // added the token
                 if (accessTokenCache.containsKey(key)) {
-                    return accessTokenCache.get(key).getAccessToken(clientId);
+                    tokenManager = accessTokenCache.get(key);
                 } else {
-                    logger.debug("creating token manager for %s",key);
-                    SyncTokenManager tokenManager = new SyncTokenManager();
+                    logger.debug("creating token manager for %s", key);
+                    tokenManager = new SyncTokenManager();
                     accessTokenCache.put(key, tokenManager);
-                    // exit from lock as soon as possible. get the access token after unlocking the lock
+                    // exit from lock as soon as possible. get the access token after unlocking the
+                    // lock
                 }
             } finally {
                 lock.unlock();
             }
-            return accessTokenCache.get(key).getAccessToken(clientId);
+            if (tokenManager != null) {
+                return tokenManager.getAccessToken(clientId);
+            } else {
+                throw new IllegalStateException("TokenManager is null");
+            }
         }
     }
 
@@ -60,6 +68,18 @@ public class TokenManager {
             return "system";
         } else {
             return clientId;
+        }
+    }
+
+    public void resetAccessToken(String clientId) {
+        String key = getKey(clientId);
+        try {
+            lock.lock();
+            if (accessTokenCache.containsKey(key)) {
+                accessTokenCache.remove(key);
+            }
+        } finally {
+            lock.unlock();
         }
     }
 }

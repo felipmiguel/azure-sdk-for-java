@@ -34,6 +34,7 @@ DATABASE_FQDN=${POSTGRESQL_HOST}.postgres.database.azure.com
 POSTGRESQL_CONNECTION_URL="jdbc:postgresql://${DATABASE_FQDN}:5432/${DATABASE_NAME}"
 LOCATION=[YOUR PREFERRED LOCATION]
 POSTGRESQL_ADMIN_USER=azureuser
+APPSERVICE_LOGIN_NAME='checklistapp'
 ```
 
 Depending if the hosting environment is Azure App Services or Azure Spring Apps there can be some differences.

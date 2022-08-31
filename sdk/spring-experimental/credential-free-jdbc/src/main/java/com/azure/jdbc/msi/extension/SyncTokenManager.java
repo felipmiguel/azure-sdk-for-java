@@ -14,7 +14,7 @@ public class SyncTokenManager {
     private ReentrantLock lock = new ReentrantLock();
     AccessToken accessToken;
 
-    protected synchronized AccessToken getAccessToken(String clientId) {
+    protected AccessToken getAccessToken(String clientId) {
         try {
             lock.lock();
             if (accessToken == null || accessToken.isExpired()) {
