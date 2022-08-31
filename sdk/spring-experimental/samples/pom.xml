@@ -1,45 +1,61 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    
-  <modelVersion>4.0.0</modelVersion>
-    
-  <groupId>com.azure</groupId>
-    
-  <artifactId>credential-free-jdbc-samples</artifactId>
-    
-  <name>JDBC credential free extension samples</name>
-    
-  <packaging>pom</packaging>
-    
-  <version>1.0.0</version>
-    
-  <!-- Need not change for every release-->
-    
-  <parent>
-        
-    <groupId>com.azure.spring</groupId>
-        
-    <artifactId>spring-cloud-azure-experimental</artifactId>
-        
-    <version>1.0.0</version>
-        
-    <relativePath>..</relativePath>
-        
-    <!--  lookup parent from repository  -->
       
+  
+  <modelVersion>4.0.0</modelVersion>
+      
+  
+  <groupId>com.azure</groupId>
+      
+  
+  <artifactId>credential-free-jdbc-samples</artifactId>
+      
+  
+  <name>JDBC credential free extension samples</name>
+      
+  
+  <packaging>pom</packaging>
+      
+  
+  <version>1.0.0</version>
+      
+  
+  <!-- Need not change for every release-->
+      
+  
+  <parent>
+            
+    
+    <groupId>com.azure.spring</groupId>
+            
+    
+    <artifactId>spring-cloud-azure-experimental</artifactId>
+            
+    
+    <version>1.0.0</version>
+            
+    
+    <relativePath>..</relativePath>
+            
+    
+    <!--  lookup parent from repository  -->
+          
+  
   </parent>
-    
+      
+  
   <modules>
-        
-    <module>jdbc-connection</module>
-        
-    <module>datasource-connection</module>
-        
-    <module>spring-starter</module>
-        
+            
     
-    <module>demo</module>
+    <module>jdbc-connection</module>
+            
+    
+    <module>datasource-connection</module>
+            
+    
+    <module>spring-starter</module>
       
   </modules>
-  
+    
+
 </project>
