@@ -91,7 +91,7 @@ az postgres server firewall-rule delete --resource-group $RESOURCE_GROUP --serve
 # Service connection to postgresql end of configuration
 
 # Build JAR file and push to ACR using buildAcr profile
-mvn clean package -DskipTests -f ../pom.xml -PbuildAcr -DRESOURCE_GROUP=$RESOURCE_GROUP -DACR_NAME=$ACR_NAME
+mvn clean package -DskipTests -PbuildAcr -DRESOURCE_GROUP=$RESOURCE_GROUP -DACR_NAME=$ACR_NAME
 
 # Create the container app
 az containerapp create \
