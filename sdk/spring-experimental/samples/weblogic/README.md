@@ -249,6 +249,7 @@ Now copy both MySQL community driver jar file and the credential-free authentica
 This example copys the libraries to `/u01/azure-mysql-credential-free/`.
 
 ```bash
+mkdir /u01/azure-mysql-credential-free
 cp -R /home/weblogic/libs/*.jar  /u01/azure-mysql-credential-free/
 chown oracle:oracle /u01/azure-mysql-credential-free/ -R
 ```
@@ -312,7 +313,11 @@ The following page can be set with the default values.
 
 Then in the connection properties, set the database and hostname created previously. The port should be 3306 and the user name should be the user created previously. 
 
-The user will look like applicationname@mydomain.onmicrosoft.com@mysqlhost.
+The user will look like applicationname@mydomain.onmicrosoft.com@mysqlhost. You can show it with command:
+
+```
+echo ${APPLICATION_NAME}@${CURRENT_USER_DOMAIN}@${MYSQL_HOST}
+```
 
 Important: Keep the password empty :)
 
@@ -331,6 +336,12 @@ Here an example of the JDBC url:
 
 ```
 jdbc:mysql://thegreataadauthdb.mysql.database.azure.com:3306/checklist?useSSL=true&requireSSL=true&defaultAuthenticationPlugin=com.azure.jdbc.msi.extension.mysql.AzureMySqlMSIAuthenticationPlugin&authenticationPlugins=com.azure.jdbc.msi.extension.mysql.AzureMySqlMSIAuthenticationPlugin&clientid=d36a3bbf-3494-448d-807e-ee936847ad2f
+```
+
+Note that managed identity client id should be value of `APPLICATION_IDENTITY_APPID` in this example. You are able to show the JDBC url with command:
+
+```
+echo "jdbc:mysql://${MYSQL_HOST}.mysql.database.azure.com:3306/checklist?useSSL=true&requireSSL=true&defaultAuthenticationPlugin=com.azure.jdbc.msi.extension.mysql.AzureMySqlMSIAuthenticationPlugin&authenticationPlugins=com.azure.jdbc.msi.extension.mysql.AzureMySqlMSIAuthenticationPlugin&clientid=${APPLICATION_IDENTITY_APPID}"
 ```
 
 ![Test Database](./media/wls-data-source-7.png)
