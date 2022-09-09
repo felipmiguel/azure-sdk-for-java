@@ -238,19 +238,13 @@ The installation consists of the following steps:
 * Copy the MySQL community driver jar file and the credential-free authentication plugin jar file into the WebLogic modules folder.
 * Configure the WebLogic domain classpath to find the new modules. If this step is not performed, the new modules will not be found.
 
-##### Copy the MySQL community driver jar file to the WebLogic machine
-
 To perform the following action it is required elevated mode, so the first step will be to make a _sudo su_ command.
 
 ```bash
 sudo su
 ```
 
-```bash
-mv mysql-connector-java-commercial-8.0.14 bak_mysql-connector-java-commercial-8.0.14
-```
-
-Now copy both MySQL community driver jar file and the credential-free authentication plugin jar file to a folder that the WebLogic proccess is able to access. Make sure the libraries are owned by `oracle:oracle`.
+Now copy both MySQL community driver jar file and the credential-free authentication plugin jar file to a folder that the WLS proccess is able to access. Make sure the libraries are owned by `oracle:oracle`.
 
 This example copys the libraries to `/u01/azure-mysql-credential-free/`.
 
