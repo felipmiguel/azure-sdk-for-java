@@ -235,36 +235,28 @@ Now both the MySQL community plugin and the credential free authentication plugi
 
 The installation consists of the following steps:
 
-* Copy the MySQL community driver jar file and the credential-free authentication plugin jar file into the WebLogic modules folder. To avoid conflicts with the installed commercial version of the driver, it is necessary to move the commercial version to a different folder.
+* Copy the MySQL community driver jar file and the credential-free authentication plugin jar file into the WebLogic modules folder.
 * Configure the WebLogic domain classpath to find the new modules. If this step is not performed, the new modules will not be found.
 
-##### Copy the MySQL community driver jar file to the WebLogic modules folder
+##### Copy the MySQL community driver jar file to the WebLogic machine
 
-The default WebLogic server location is /u01. And the modules is located in /u01/app/wls/install/oracle/middleware/oracle_home/oracle_common/modules .To perform the following action it is required elevated mode, so the first step will be to make a _sudo su_ command.
+To perform the following action it is required elevated mode, so the first step will be to make a _sudo su_ command.
 
 ```bash
 sudo su
 ```
 
-First move the existing version of the driver to a different folder. For this it is necessary to locate first the exact folder.
-
-```bash
-cd /u01/app/wls/install/oracle/middleware/oracle_home/oracle_common/modules
-ls | grep mysql
-```
-
-The last command will return the name of the folder containing the MySQL driver. 
-![commercial mysql driver](./media/wls-prepare-mysql-3.png)
-In this case mysql-connector-java-commercial-8.0.14. So now, let's move the driver to a different folder, for instance bak_mysql-connector-java-commercial-8.0.14.
-
 ```bash
 mv mysql-connector-java-commercial-8.0.14 bak_mysql-connector-java-commercial-8.0.14
 ```
 
-Now copy both MySQL community driver jar file and the credential-free authentication plugin jar file to the WebLogic modules folder.
+Now copy both MySQL community driver jar file and the credential-free authentication plugin jar file to a folder that the WebLogic proccess is able to access. Make sure the libraries are owned by `oracle:oracle`.
+
+This example copys the libraries to `/u01/azure-mysql-credential-free/`.
 
 ```bash
-cp /home/weblogic/libs/*.jar .
+cp -R /home/weblogic/libs/*.jar  /u01/azure-mysql-credential-free/
+chown oracle:oracle /u01/azure-mysql-credential-free/ -R
 ```
 
 Now it is necessary to configure the WebLogic domain classpath to find the new modules. For that purpose go the WebLogic domain folder to configure. In the case the adminDomain. The default root folder for domains created by the template is /u01/domains, then the adminDomain will be located in /u01/domains/adminDomain. Then go to the bin folder and edit the setDomainEnv.sh file. In this sample it is used nano, but you can use any text editor.
@@ -277,7 +269,8 @@ nano setDomainEnv.sh
 Look for WL_HOME definition and add the following lines before WL_HOME.
 ```
 # Set credential free dependencies in the class path
-CLASSPATH="/u01/app/wls/install/oracle/middleware/oracle_home/oracle_common/modules/mysql-connector-java-8.0.30.jar:/u01/app/wls/install/oracle/middleware/oracle_home/oracle_common/modules/credential-free-jdbc-0.0.1-SNAPSHOT.jar:${CLASSPATH}"
+PRE_CLASSPATH="/u01/azure-mysql-credential-free/mysql-connector-java-8.0.30.jar:/u01/azure-mysql-credential-free/credential-free-jdbc-0.0.1-SNAPSHOT.jar"
+export PRE_CLASSPATH
 ```
 
 ![setDomainEnv.sh](./media/wls-setDomainEnv.png)
